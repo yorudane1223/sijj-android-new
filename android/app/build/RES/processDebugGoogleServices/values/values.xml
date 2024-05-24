@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="gcm_defaultSenderId" translatable="false">92898333776</string>
-    <string name="google_api_key" translatable="false">AIzaSyBJl9_bZ9ovmhY6s06dANjB994l78DJ-jw</string>
-    <string name="google_app_id" translatable="false">1:92898333776:android:42a7ab6c3789782b49ad55</string>
-    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBJl9_bZ9ovmhY6s06dANjB994l78DJ-jw</string>
-    <string name="google_storage_bucket" translatable="false">sijj-23510.appspot.com</string>
-    <string name="project_id" translatable="false">sijj-23510</string>
-</resources>

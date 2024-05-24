@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/models/quickalert_type.dart';
@@ -75,14 +74,11 @@ Future<void> login(
       ));
     }
   } catch (e) {
-    if (kDebugMode) {
-      print(e);
-    }
     // ignore: use_build_context_synchronously
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       backgroundColor: Colors.red,
       content: Center(
-        child: Text('Terjadi kesalahan saat melakukan login!'),
+        child: Text(e.toString()),
       ),
     ));
   }
@@ -104,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     _loginTokenAlreadyExists(context);
-    getLoginToken();
+    // getLoginToken();
     _passwordVisible = false;
     super.initState();
   }
