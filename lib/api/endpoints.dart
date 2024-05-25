@@ -6,4 +6,6 @@ const updateMyProfileCredentialsApiUrl =
 const updateUserPassword = 'https://sijj.dpupr.com/api/penilik/change-password';
 const updateProfileUserImageApiUrl =
     'https://sijj.dpupr.com/api/penilik/update-profile-picture';
-const attendenceApiUrl = 'https://sijj.dpupr.com/api/absen';
+const attendanceApiUrl = 'https://sijj.dpupr.com/api/absen';
+const realtimeLocationStore =
+    'https://sijj.dpupr.com/api/penilik/update-penilik-location';

@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element
+// ignore_for_file: unused_element, use_build_context_synchronously
 
 import 'dart:convert';
 import 'dart:io';
@@ -10,9 +10,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
 import 'package:sijj_provinsi_banten/models/user_is_login_model.dart';
 import 'package:sijj_provinsi_banten/pages/auth/login_page.dart';
+import 'package:sijj_provinsi_banten/services/realtime_location.dart';
 
 class AuthProvider with ChangeNotifier {
   UserIsLogin? _user;
+  final LocationService _locationService = LocationService();
 
   UserIsLogin? get user => _user;
 
@@ -60,6 +62,7 @@ class AuthProvider with ChangeNotifier {
         }
 
         notifyListeners();
+        _locationService.startTracking(context);
       } else {
         throw Exception('Gagal memuat profil');
       }
@@ -81,6 +84,7 @@ class AuthProvider with ChangeNotifier {
       if (response.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.remove('loginToken');
+        _locationService.stopTracking();
         // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const LoginPage()));
