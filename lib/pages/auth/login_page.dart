@@ -68,8 +68,9 @@ Future<void> login(
     } else {
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        backgroundColor: Colors.red,
         content: Center(
-          child: Text('Gagal melakukan login!'),
+          child: Text('Terjadi kesalahan, gagal melakukan login!'),
         ),
       ));
     }
