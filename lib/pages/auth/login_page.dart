@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quickalert/models/quickalert_type.dart';
@@ -47,6 +48,7 @@ Future<void> login(
         );
       } else {
         // ignore: use_build_context_synchronously
+        print(responseDecoded);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Center(
             child: Text('Data tidak valid dari server!'),
@@ -66,11 +68,12 @@ Future<void> login(
         text: responseDecoded['message'],
       );
     } else {
+      print(responseDecoded);
       // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         backgroundColor: Colors.red,
         content: Center(
-          child: Text('Terjadi kesalahan, gagal melakukan login!'),
+          child: Text('gagal melakukan login!'),
         ),
       ));
     }
@@ -101,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     _loginTokenAlreadyExists(context);
+    // verifyToken();
     // getLoginToken();
     _passwordVisible = false;
     super.initState();
@@ -236,8 +240,9 @@ class _LoginPageState extends State<LoginPage> {
   // get login token
   Future<String?> getLoginToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final loginToken = prefs.getString('loginToken');
+    print('login token in login page  = $loginToken');
     return prefs.getString('loginToken');
-    // print('login token in login page  = $token');
     // prefs.remove('loginToken');
   }
 

@@ -5,4 +5,5 @@ import '../models/sidebar_model.dart';
 List<Menu> sidebarMenu = [
   Menu(icon: 'home.svg', name: 'Beranda', color: white, page: 'HomePage'),
   Menu(icon: 'map.svg', name: 'Peta', color: white, page: 'MapTab'),
+  Menu(icon: 'report.svg', name: 'Pengaduan', color: white, page: 'ReportPage'),
 ];

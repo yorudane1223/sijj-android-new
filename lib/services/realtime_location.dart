@@ -1,13 +1,12 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
-import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 
 class LocationService {
@@ -31,6 +30,8 @@ class LocationService {
         ),
       ).listen((Position position) {
         _sendLocationToApi(position);
+        Provider.of<LocationModel>(context, listen: false)
+            .setLocation(position.latitude, position.longitude);
       });
     }
   }
@@ -60,8 +61,6 @@ class LocationService {
 
       if (response.statusCode == 200) {
         print('Location sent successfully');
-        print(
-            'Longitude: ${position.longitude.toString()}, Latitude: ${position.latitude.toString()}');
       } else {
         print('Failed to send location. Status code: ${response.statusCode}');
       }
@@ -138,5 +137,19 @@ class LocationService {
         );
       },
     );
+  }
+}
+
+class LocationModel with ChangeNotifier {
+  double? _latitude;
+  double? _longitude;
+
+  double? get latitude => _latitude;
+  double? get longitude => _longitude;
+
+  void setLocation(double latitude, double longitude) {
+    _latitude = latitude;
+    _longitude = longitude;
+    notifyListeners();
   }
 }

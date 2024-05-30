@@ -8,19 +8,20 @@ import 'package:sijj_provinsi_banten/components/layouts/sidebar_layout.dart';
 import 'package:sijj_provinsi_banten/functions/auth_function.dart';
 import 'package:sijj_provinsi_banten/pages/settings/update_password_page.dart';
 import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
-import 'package:sijj_provinsi_banten/tabs/home_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/create_report_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/report_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 
-class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key});
+class CreateReportPage extends StatefulWidget {
+  const CreateReportPage({super.key});
 
   @override
-  State<MyProfilePage> createState() => _MyProfilePage();
+  State<CreateReportPage> createState() => _CreateReportPageState();
 }
 
-class _MyProfilePage extends State<MyProfilePage> {
+class _CreateReportPageState extends State<CreateReportPage> {
   bool _isLoading = true;
 
   @override
@@ -36,7 +37,7 @@ class _MyProfilePage extends State<MyProfilePage> {
     super.initState();
   }
 
-  int currentPageIndex = 2;
+  int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return _isLoading
@@ -108,7 +109,7 @@ class _MyProfilePage extends State<MyProfilePage> {
             ),
             body: <Widget>[
               /// Home page
-              const HomeTab(),
+              const CreateReportTab(),
 
               // Map page
               // const MapTab(),
@@ -130,10 +131,10 @@ class _MyProfilePage extends State<MyProfilePage> {
               selectedIndex: currentPageIndex,
               destinations: <Widget>[
                 NavigationDestination(
-                  selectedIcon: SvgPicture.asset('assets/icons/home.svg',
+                  selectedIcon: SvgPicture.asset('assets/icons/report.svg',
                       color: Colors.white),
-                  icon: SvgPicture.asset('assets/icons/home.svg'),
-                  label: 'Beranda',
+                  icon: SvgPicture.asset('assets/icons/report.svg'),
+                  label: 'Pengaduan',
                 ),
                 NavigationDestination(
                   selectedIcon: SvgPicture.asset(

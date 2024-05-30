@@ -1,20 +1,26 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
+import 'package:sijj_provinsi_banten/models/location_model.dart';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
+import 'package:sijj_provinsi_banten/pages/attendance_detail.dart';
+import 'package:sijj_provinsi_banten/pages/auth/login_page.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 
 // fetch attendance
-Future<AttendanceModel> fetchAttendance() async {
+Future<AttendanceModel> fetchAttendance(BuildContext context) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   final loginToken = prefs.getString('loginToken');
 
@@ -27,9 +33,25 @@ Future<AttendanceModel> fetchAttendance() async {
     return AttendanceModel.fromJson(
       jsonDecode(response.body) as Map<String, dynamic>,
     );
-  } else {
-    throw Exception('Failed to load attendance');
+  } else if (response.statusCode == 401) {
+    print('token has expired!');
+    prefs.remove('loginToken');
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginPage()),
+    );
+
+    QuickAlert.show(
+      barrierDismissible: false,
+      headerBackgroundColor: primary,
+      context: context,
+      type: QuickAlertType.info,
+      text: 'Sesi Anda telah habis, silahkan login kembali!',
+      confirmBtnColor: primary,
+    );
   }
+  throw Exception(response.body);
 }
 
 class AttendanceModel {
@@ -138,7 +160,7 @@ class _AbsenTabState extends State<AbsenTab> {
     setState(() {
       isLoading = true;
     });
-    final attendanceModel = await fetchAttendance();
+    final attendanceModel = await fetchAttendance(context);
     setState(() {
       attendances = attendanceModel.data;
       isLoading = false;
@@ -147,9 +169,6 @@ class _AbsenTabState extends State<AbsenTab> {
 
   XFile? _image;
   bool _isLoading = false;
-  String? _latitude;
-  String? _longitude;
-  final statusDefault = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -192,17 +211,71 @@ class _AbsenTabState extends State<AbsenTab> {
                         ? const Center(
                             child: Text('No attendance data available'))
                         : ListView.builder(
-                            shrinkWrap: true, // Add this line
-                            physics:
-                                const NeverScrollableScrollPhysics(), // Add this line
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: attendances.length,
                             itemBuilder: (context, index) {
-                              return Container(
-                                height: 60,
-                                decoration: BoxDecoration(color: Colors.black),
-                                child: Text(
-                                  attendances[index].latitude,
-                                  style: TextStyle(color: Colors.white),
+                              final attendance = attendances[index];
+
+                              // change status from number to word
+                              String status = '';
+                              if (attendance.status == 0) {
+                                status = 'Keluar';
+                              } else if (attendance.status == 1) {
+                                status = 'Masuk';
+                              }
+
+                              return GestureDetector(
+                                onTap: () {
+                                  print('tapped');
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AttendanceDetail(
+                                        latitude: attendance.latitude,
+                                        longitude: attendance.longitude,
+                                        imageUrl: attendance.image,
+                                        status: status,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  elevation: 4,
+                                  margin: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                        'Lokasi : ${attendance.latitude}, ${attendance.longitude}'),
+                                                    Text('Status : $status'),
+                                                  ],
+                                                ),
+                                                SvgPicture.asset(
+                                                    'assets/icons/right.svg')
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -235,7 +308,7 @@ class _AbsenTabState extends State<AbsenTab> {
         _isLoading = true;
       });
       await _getCurrentLocation();
-      await attendence();
+      await attendence(context);
       setState(() {
         _isLoading = false;
       });
@@ -249,10 +322,9 @@ class _AbsenTabState extends State<AbsenTab> {
       Position position = await _determinePosition();
       final latitude = position.latitude;
       final longitude = position.longitude;
-      setState(() {
-        _latitude = latitude.toString();
-        _longitude = longitude.toString();
-      });
+      // Set lokasi menggunakan provider
+      Provider.of<LocationModel>(context, listen: false)
+          .setLocation(latitude, longitude);
     } catch (e) {
       print('Gagal mendapatkan lokasi: $e');
     }
@@ -263,64 +335,84 @@ class _AbsenTabState extends State<AbsenTab> {
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        throw 'Izin lokasi ditolak';
-      }
     }
+
+    if (permission == LocationPermission.denied) {
+      throw Exception('Location permissions are denied');
+    }
+
     if (permission == LocationPermission.deniedForever) {
-      throw 'Izin lokasi ditolak secara permanen';
+      throw Exception(
+          'Location permissions are permanently denied, we cannot request permissions.');
     }
+
     return await Geolocator.getCurrentPosition();
   }
 
-  Future<void> attendence() async {
+  Future<void> attendence(BuildContext context) async {
+    final locationModel = Provider.of<LocationModel>(context, listen: false);
+    final latitude = locationModel.latitude;
+    final longitude = locationModel.longitude;
+
+    if (latitude == null || longitude == null) {
+      print('Lokasi tidak tersedia');
+      return;
+    }
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final loginToken = prefs.getString('loginToken');
+
+    if (loginToken == null) {
+      print('Login token is null');
+      return;
+    }
+
+    final imageBytes = await _image?.readAsBytes();
+    if (imageBytes == null) {
+      print('Gagal membaca gambar');
+      return;
+    }
+
+    final request = http.MultipartRequest('POST', Uri.parse(attendanceApiUrl));
+    request.headers[HttpHeaders.authorizationHeader] = 'Bearer $loginToken';
+    request.fields['latitude'] = latitude.toString();
+    request.fields['longitude'] = longitude.toString();
+    request.files.add(http.MultipartFile.fromBytes(
+      'image',
+      imageBytes,
+      filename: 'attendance.jpg',
+    ));
+
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      final loginToken = prefs.getString('loginToken');
-
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(attendanceApiUrl),
-      );
-      request.headers['authorization'] = 'Bearer $loginToken';
-      request.headers['Accept'] = 'application/json';
-
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          _image!.path,
-        ),
-      );
-
-      request.fields['latitude'] = _latitude.toString();
-      request.fields['longitude'] = _longitude.toString();
-      request.fields['status'] = statusDefault.toString();
-
       final response = await request.send();
-      var responseBody = await response.stream.bytesToString();
-      var responseData = jsonDecode(responseBody);
+      final responseJson = await response.stream.bytesToString();
+      final responseBody = jsonDecode(responseJson);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
+        await locationModel.startLocationUpdates();
+        print(responseBody);
         QuickAlert.show(
-          confirmBtnColor: primary,
-          barrierDismissible: false,
-          onConfirmBtnTap: () => {Navigator.pop(context)},
           context: context,
           type: QuickAlertType.success,
-          text: responseData['message'],
+          confirmBtnColor: primary,
+          text: responseBody['message'],
         );
       } else {
+        await locationModel.startLocationUpdates();
         QuickAlert.show(
-          confirmBtnColor: primary,
-          barrierDismissible: false,
-          onConfirmBtnTap: () => {Navigator.pop(context)},
           context: context,
           type: QuickAlertType.warning,
-          text: responseData['message'],
+          confirmBtnColor: primary,
+          text: responseBody['message'],
         );
       }
+      locationModel.stopLocationUpdates();
     } catch (e) {
-      print('error $e');
+      QuickAlert.show(
+        context: context,
+        type: QuickAlertType.error,
+        text: 'Error submitting attendance : $e',
+      );
     }
   }
 }

@@ -6,8 +6,10 @@ import 'package:sijj_provinsi_banten/functions/auth_function.dart';
 import 'package:sijj_provinsi_banten/pages/coordinate_page.dart';
 import 'package:sijj_provinsi_banten/pages/home_page.dart';
 import 'package:sijj_provinsi_banten/pages/map_page.dart';
-import 'package:sijj_provinsi_banten/tabs/absen_tab.dart';
+import 'package:sijj_provinsi_banten/pages/report.dart';
+import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/report_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 
@@ -94,6 +96,8 @@ class _SidebarState extends State<Sidebar> {
                     return const MapPage();
                   } else if (e.page == 'CoordinatePage') {
                     return const CoordinatePage();
+                  } else if (e.page == 'ReportPage') {
+                    return const ReportPage();
                   }
                   throw Exception("Unknown page: ${e.page}");
                 }));

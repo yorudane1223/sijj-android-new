@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sijj_provinsi_banten/pages/home_page.dart';
-import 'package:sijj_provinsi_banten/tabs/absen_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/map_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';

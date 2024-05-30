@@ -9,3 +9,6 @@ const updateProfileUserImageApiUrl =
 const attendanceApiUrl = 'https://sijj.dpupr.com/api/absen';
 const realtimeLocationStore =
     'https://sijj.dpupr.com/api/penilik/update-penilik-location';
+const verifyTokenApiUrl = 'https://sijj.dpupr.com/api/penilik/verify-token';
+const myReportApiUrl = 'https://sijj.dpupr.com/api/penilik/laporan';
+const createReportApiUrl = 'https://sijj.dpupr.com/api/penilik/laporan/create';

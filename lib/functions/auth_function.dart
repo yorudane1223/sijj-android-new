@@ -2,19 +2,23 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
+import 'package:sijj_provinsi_banten/functions/session_function.dart';
 import 'package:sijj_provinsi_banten/models/user_is_login_model.dart';
 import 'package:sijj_provinsi_banten/pages/auth/login_page.dart';
 import 'package:sijj_provinsi_banten/services/realtime_location.dart';
+import 'package:sijj_provinsi_banten/themes/color.dart';
 
 class AuthProvider with ChangeNotifier {
   UserIsLogin? _user;
   final LocationService _locationService = LocationService();
+  // final Session _sessionCheck = Session();
 
   UserIsLogin? get user => _user;
 
@@ -24,9 +28,10 @@ class AuthProvider with ChangeNotifier {
 
     if (loginToken == null) {
       Navigator.pushReplacement(
-          // ignore: use_build_context_synchronously
-          context,
-          MaterialPageRoute(builder: (context) => const LoginPage()));
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+      return;
     }
 
     try {
@@ -37,38 +42,49 @@ class AuthProvider with ChangeNotifier {
           'Accept': 'application/json'
         },
       );
-      final responseData = jsonDecode(response.body);
-      final responseDecoded = responseData['data'];
 
       if (response.statusCode == 200) {
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        String? loginToken = pref.getString('loginToken');
+        final responseData = jsonDecode(response.body);
+        final responseDecoded = responseData['data'];
 
-        if (loginToken != null) {
-          _user = UserIsLogin(
-            id: responseDecoded['id'],
-            nama: responseDecoded['nama'],
-            username: responseDecoded['username'],
-            email: responseDecoded['email'],
-            telepon: responseDecoded['telepon'],
-            alamat: responseDecoded['alamat'],
-            image: responseDecoded['image'],
-            token: loginToken,
-          );
-        } else {
-          // ignore: use_build_context_synchronously
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const LoginPage()));
-        }
+        _user = UserIsLogin(
+          id: responseDecoded['id'],
+          nama: responseDecoded['nama'],
+          username: responseDecoded['username'],
+          email: responseDecoded['email'],
+          telepon: responseDecoded['telepon'],
+          alamat: responseDecoded['alamat'],
+          image: responseDecoded['image'],
+          token: loginToken,
+        );
 
         notifyListeners();
-        _locationService.startTracking(context);
+        // _locationService.startTracking(context);
+        // _sessionCheck.sessionCheck();
       } else {
-        throw Exception('Gagal memuat profil');
+        final responseData = jsonDecode(response.body);
+        final message = responseData['message'] ?? 'Gagal memuat profil';
+        throw Exception(message);
       }
     } catch (e) {
-      print(e);
-      throw Exception('Gagal memuat profil, Silahkan periksa jaringan Anda');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('loginToken');
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+      );
+
+      QuickAlert.show(
+        barrierDismissible: false,
+        headerBackgroundColor: primary,
+        context: context,
+        type: QuickAlertType.info,
+        text: 'Sesi Anda telah habis, silahkan login kembali!',
+        confirmBtnColor: primary,
+      );
+
+      print('sesi anda telah habis silahkan login kembali!');
     }
   }
 
@@ -78,21 +94,27 @@ class AuthProvider with ChangeNotifier {
       SharedPreferences pref = await SharedPreferences.getInstance();
       final loginToken = pref.getString('loginToken');
 
-      // make request to logout
-      final response = await http.post(Uri.parse(logoutApiUrl),
-          headers: {HttpHeaders.authorizationHeader: 'Bearer $loginToken'});
-      if (response.statusCode == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.remove('loginToken');
-        _locationService.stopTracking();
-        // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const LoginPage()));
+      if (loginToken != null) {
+        // make request to logout
+        final response = await http.post(
+          Uri.parse(logoutApiUrl),
+          headers: {HttpHeaders.authorizationHeader: 'Bearer $loginToken'},
+        );
+
+        if (response.statusCode == 200) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          prefs.remove('loginToken');
+          _locationService.stopTracking();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const LoginPage()),
+          );
+        } else {
+          throw Exception('Failed to log out');
+        }
       }
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      print(e);
     }
   }
 }

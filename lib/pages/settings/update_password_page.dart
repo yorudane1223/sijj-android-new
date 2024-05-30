@@ -6,7 +6,7 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:sijj_provinsi_banten/components/layouts/sidebar_layout.dart';
 import 'package:sijj_provinsi_banten/functions/auth_function.dart';
-import 'package:sijj_provinsi_banten/tabs/absen_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/update_password_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
