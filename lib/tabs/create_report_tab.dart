@@ -9,7 +9,6 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
 import 'package:sijj_provinsi_banten/pages/report.dart';
-import 'package:sijj_provinsi_banten/tabs/report_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 import 'package:geolocator/geolocator.dart';
@@ -23,8 +22,8 @@ Future<void> createReport(String latitude, String longitude, String condition,
   request.headers[HttpHeaders.authorizationHeader] = 'Bearer $loginToken';
   request.headers['Accept'] = 'application/json';
 
-  request.fields['latitude'] = latitude;
-  request.fields['longitude'] = longitude;
+  request.fields['latitude'] = longitude;
+  request.fields['longitude'] = latitude;
   request.fields['kondisi'] = condition;
   request.files.add(await http.MultipartFile.fromPath('image', image.path));
 

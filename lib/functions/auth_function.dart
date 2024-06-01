@@ -9,7 +9,6 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
-import 'package:sijj_provinsi_banten/functions/session_function.dart';
 import 'package:sijj_provinsi_banten/models/user_is_login_model.dart';
 import 'package:sijj_provinsi_banten/pages/auth/login_page.dart';
 import 'package:sijj_provinsi_banten/services/realtime_location.dart';

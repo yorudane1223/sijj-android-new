@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
+import 'package:sijj_provinsi_banten/models/location_model.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 
 class LocationService {
@@ -29,7 +30,7 @@ class LocationService {
           distanceFilter: 1,
         ),
       ).listen((Position position) {
-        _sendLocationToApi(position);
+        _sendLocationToApi(context, position);
         Provider.of<LocationModel>(context, listen: false)
             .setLocation(position.latitude, position.longitude);
       });
@@ -40,7 +41,8 @@ class LocationService {
     positionStream?.cancel();
   }
 
-  Future<void> _sendLocationToApi(Position position) async {
+  Future<void> _sendLocationToApi(
+      BuildContext context, Position position) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final loginToken = prefs.getString('loginToken');
 
@@ -48,6 +50,8 @@ class LocationService {
       print('Login token is null');
       return;
     }
+
+    print('${position.latitude}, ${position.longitude} : realtime_location');
 
     try {
       final response = await http.post(
@@ -66,6 +70,11 @@ class LocationService {
       }
     } catch (e) {
       print('Error sending location: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error sending location: $e'),
+        ),
+      );
     }
   }
 
@@ -137,19 +146,5 @@ class LocationService {
         );
       },
     );
-  }
-}
-
-class LocationModel with ChangeNotifier {
-  double? _latitude;
-  double? _longitude;
-
-  double? get latitude => _latitude;
-  double? get longitude => _longitude;
-
-  void setLocation(double latitude, double longitude) {
-    _latitude = latitude;
-    _longitude = longitude;
-    notifyListeners();
   }
 }

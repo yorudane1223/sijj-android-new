@@ -53,7 +53,11 @@ class AttendanceDetailTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     Text(
-                      'Lokasi: $latitude, $longitude',
+                      'Latitude: $latitude',
+                      style: poppins.copyWith(fontSize: 15),
+                    ),
+                    Text(
+                      'Longitude: $longitude',
                       style: poppins.copyWith(fontSize: 15),
                     ),
                     Text(

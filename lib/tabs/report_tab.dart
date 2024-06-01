@@ -194,12 +194,12 @@ class _ReportPageState extends State<ReportTab> {
               ),
               const SizedBox(height: 15),
               isLoading
-                  ? Center(child: CircularProgressIndicator())
+                  ? const Center(child: CircularProgressIndicator())
                   : reports.isEmpty
-                      ? Center(child: Text('Tidak ada data pengaduan'))
+                      ? const Center(child: Text('Tidak ada data pengaduan'))
                       : ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: reports.length,
                           itemBuilder: (context, index) {
                             final report = reports[index];
