@@ -12,7 +12,7 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
-import 'package:sijj_provinsi_banten/pages/attendance_detail.dart';
+import 'package:sijj_provinsi_banten/pages/attendance_page.dart';
 import 'package:sijj_provinsi_banten/pages/auth/login_page.dart';
 import 'package:sijj_provinsi_banten/services/realtime_location.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
@@ -53,14 +53,14 @@ Future<AttendanceModel> fetchAttendance(BuildContext context) async {
   throw Exception(response.body);
 }
 
-class AbsenTab extends StatefulWidget {
-  const AbsenTab({super.key});
+class AttendanceTab extends StatefulWidget {
+  const AttendanceTab({super.key});
 
   @override
   State createState() => _AbsenTabState();
 }
 
-class _AbsenTabState extends State<AbsenTab> {
+class _AbsenTabState extends State<AttendanceTab> {
   bool isLoading = false;
   List<Attendance> attendances = [];
   final LocationService _locationService = LocationService();
@@ -155,8 +155,7 @@ class _AbsenTabState extends State<AbsenTab> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) =>
-                                              AttendanceDetail(
+                                          builder: (context) => AttendancePage(
                                             latitude: attendance.latitude,
                                             longitude: attendance.longitude,
                                             imageUrl: attendance.image,

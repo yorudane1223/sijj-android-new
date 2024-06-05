@@ -1,28 +1,25 @@
 import 'dart:convert';
 
-class AttendanceModel {
+class ReportModel {
   final bool success;
   final String message;
-  final List<Attendance> data;
+  final List<Report> data;
 
-  AttendanceModel({
+  ReportModel({
     required this.success,
     required this.message,
     required this.data,
   });
 
-  factory AttendanceModel.fromRawJson(String str) =>
-      AttendanceModel.fromJson(json.decode(str));
+  factory ReportModel.fromRawJson(String str) =>
+      ReportModel.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory AttendanceModel.fromJson(Map<String, dynamic> json) =>
-      AttendanceModel(
+  factory ReportModel.fromJson(Map<String, dynamic> json) => ReportModel(
         success: json["success"],
         message: json["message"],
-        data: List<Attendance>.from(
-          json["data"].map((x) => Attendance.fromJson(x)),
-        ),
+        data: List<Report>.from(json["data"].map((x) => Report.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,56 +29,49 @@ class AttendanceModel {
       };
 }
 
-class Attendance {
+class Report {
   final int id;
+  final int penilikId;
+  final String image;
+  final String kondisi;
   final String latitude;
   final String longitude;
-  final int status;
-  final String image;
-  final String thumbnail;
-  final int penilikId;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  Attendance({
+  Report({
     required this.id,
+    required this.penilikId,
+    required this.image,
+    required this.kondisi,
     required this.latitude,
     required this.longitude,
-    required this.status,
-    required this.image,
-    required this.thumbnail,
-    required this.penilikId,
     required this.createdAt,
     required this.updatedAt,
   });
 
-  factory Attendance.fromRawJson(String str) =>
-      Attendance.fromJson(json.decode(str));
-
-  get condition => null;
+  factory Report.fromRawJson(String str) => Report.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Attendance.fromJson(Map<String, dynamic> json) => Attendance(
+  factory Report.fromJson(Map<String, dynamic> json) => Report(
         id: json["id"],
+        penilikId: json["penilik_id"],
+        image: json["image"],
+        kondisi: json["kondisi"],
         latitude: json["latitude"],
         longitude: json["longitude"],
-        status: json["status"],
-        image: json["image"],
-        thumbnail: json["thumbnail"],
-        penilikId: json["penilik_id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "penilik_id": penilikId,
+        "image": image,
+        "kondisi": kondisi,
         "latitude": latitude,
         "longitude": longitude,
-        "status": status,
-        "image": image,
-        "thumbnail": thumbnail,
-        "penilik_id": penilikId,
         "created_at": createdAt.toIso8601String(),
         "updated_at": updatedAt.toIso8601String(),
       };

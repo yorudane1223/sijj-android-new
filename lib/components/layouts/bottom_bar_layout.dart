@@ -36,7 +36,7 @@ class _BottomBarLayoutState extends State<BottomBarLayout> {
         } else if (index == 2) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AbsenTab()),
+            MaterialPageRoute(builder: (context) => const AttendanceTab()),
           );
         } else if (index == 3) {
           Navigator.push(

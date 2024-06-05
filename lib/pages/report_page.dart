@@ -7,32 +7,24 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:sijj_provinsi_banten/components/layouts/sidebar_layout.dart';
 import 'package:sijj_provinsi_banten/functions/auth_function.dart';
 import 'package:sijj_provinsi_banten/pages/settings/update_password_page.dart';
-import 'package:sijj_provinsi_banten/tabs/attendance_detail_tab.dart';
-
-import 'package:sijj_provinsi_banten/tabs/home_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/report_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 
-class AttendanceDetail extends StatefulWidget {
-  final String latitude;
-  final String longitude;
-  final String imageUrl;
-  final String status;
-
-  const AttendanceDetail({
-    super.key,
-    required this.latitude,
-    required this.longitude,
-    required this.imageUrl,
-    required this.status,
-  });
+class ReportPage extends StatefulWidget {
+  const ReportPage(
+      {super.key,
+      required String latitude,
+      required String longitude,
+      required String imageUrl});
 
   @override
-  State<AttendanceDetail> createState() => _AttendanceDetailState();
+  State<ReportPage> createState() => _ReportPageState();
 }
 
-class _AttendanceDetailState extends State<AttendanceDetail> {
+class _ReportPageState extends State<ReportPage> {
   bool _isLoading = true;
 
   @override
@@ -48,7 +40,7 @@ class _AttendanceDetailState extends State<AttendanceDetail> {
     super.initState();
   }
 
-  int currentPageIndex = 1;
+  int currentPageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return _isLoading
@@ -120,18 +112,14 @@ class _AttendanceDetailState extends State<AttendanceDetail> {
             ),
             body: <Widget>[
               // Home page
-              const HomeTab(),
-
-              // Map page
-              // const MapTab(),
+              // const HomeTab(),
 
               // Absen page
-              AttendanceDetailTab(
-                latitude: widget.latitude,
-                longitude: widget.longitude,
-                imageUrl: widget.imageUrl,
-                status: widget.status,
-              ),
+              const ReportTab(),
+
+              // attendace tab
+              const AttendanceTab(),
+              // const Text('report page!')
 
               // Profile page
               const MyProfileTab()
@@ -147,10 +135,10 @@ class _AttendanceDetailState extends State<AttendanceDetail> {
               selectedIndex: currentPageIndex,
               destinations: <Widget>[
                 NavigationDestination(
-                  selectedIcon: SvgPicture.asset('assets/icons/home.svg',
+                  selectedIcon: SvgPicture.asset('assets/icons/report.svg',
                       color: Colors.white),
-                  icon: SvgPicture.asset('assets/icons/home.svg'),
-                  label: 'Beranda',
+                  icon: SvgPicture.asset('assets/icons/report.svg'),
+                  label: 'Pengaduan',
                 ),
                 NavigationDestination(
                   selectedIcon: SvgPicture.asset(

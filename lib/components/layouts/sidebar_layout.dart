@@ -6,7 +6,7 @@ import 'package:sijj_provinsi_banten/functions/auth_function.dart';
 import 'package:sijj_provinsi_banten/pages/coordinate_page.dart';
 import 'package:sijj_provinsi_banten/pages/home_page.dart';
 import 'package:sijj_provinsi_banten/pages/map_page.dart';
-import 'package:sijj_provinsi_banten/pages/report.dart';
+import 'package:sijj_provinsi_banten/pages/report_page.dart';
 import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/report_tab.dart';
@@ -89,7 +89,7 @@ class _SidebarState extends State<Sidebar> {
                   } else if (e.page == 'MapTab') {
                     return const MapPage();
                   } else if (e.page == 'AbsenTab') {
-                    return const AbsenTab();
+                    return const AttendanceTab();
                   } else if (e.page == 'MyProfileTab') {
                     return const MyProfileTab();
                   } else if (e.page == 'MapPage') {
@@ -97,7 +97,7 @@ class _SidebarState extends State<Sidebar> {
                   } else if (e.page == 'CoordinatePage') {
                     return const CoordinatePage();
                   } else if (e.page == 'ReportPage') {
-                    return const ReportPage();
+                    return const ReportPage(imageUrl: '', latitude: '', longitude: '',);
                   }
                   throw Exception("Unknown page: ${e.page}");
                 }));

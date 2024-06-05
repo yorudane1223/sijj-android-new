@@ -7,20 +7,31 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:sijj_provinsi_banten/components/layouts/sidebar_layout.dart';
 import 'package:sijj_provinsi_banten/functions/auth_function.dart';
 import 'package:sijj_provinsi_banten/pages/settings/update_password_page.dart';
-import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/attendance_detail_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/home_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 
-class MyProfilePage extends StatefulWidget {
-  const MyProfilePage({super.key});
+class AttendancePage extends StatefulWidget {
+  final String latitude;
+  final String longitude;
+  final String status;
+  final String imageUrl;
+
+  const AttendancePage({
+    super.key,
+    required this.latitude,
+    required this.longitude,
+    required this.status,
+    required this.imageUrl,
+  });
 
   @override
-  State<MyProfilePage> createState() => _MyProfilePage();
+  State<AttendancePage> createState() => _AttendancePageState();
 }
 
-class _MyProfilePage extends State<MyProfilePage> {
+class _AttendancePageState extends State<AttendancePage> {
   bool _isLoading = true;
 
   @override
@@ -36,7 +47,7 @@ class _MyProfilePage extends State<MyProfilePage> {
     super.initState();
   }
 
-  int currentPageIndex = 2;
+  int currentPageIndex = 1;
   @override
   Widget build(BuildContext context) {
     return _isLoading
@@ -107,16 +118,21 @@ class _MyProfilePage extends State<MyProfilePage> {
               ],
             ),
             body: <Widget>[
-              /// Home page
+              // Home page
               const HomeTab(),
 
               // Map page
               // const MapTab(),
 
-              /// Absen page
-              const AttendanceTab(),
+              // Absen page
+              AttendanceDetailTab(
+                latitude: widget.latitude,
+                longitude: widget.longitude,
+                imageUrl: widget.imageUrl,
+                status: widget.status,
+              ),
 
-              /// Profile page
+              // Profile page
               const MyProfileTab()
             ][currentPageIndex],
             bottomNavigationBar: NavigationBar(

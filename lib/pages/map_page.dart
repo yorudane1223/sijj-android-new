@@ -108,7 +108,7 @@ class _MapPageState extends State<MapPage> {
         body: <Widget>[
           // Map page
           const MapTab(),
-          const AbsenTab(),
+          const AttendanceTab(),
           const MyProfileTab()
         ][currentPageIndex],
         bottomNavigationBar: NavigationBar(

@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
               // const MapTab(),
 
               /// Absen page
-              const AbsenTab(),
+              const AttendanceTab(),
 
               /// Profile page
               const MyProfileTab()

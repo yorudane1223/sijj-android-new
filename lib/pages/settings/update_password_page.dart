@@ -113,7 +113,7 @@ class _UpdatePasswordPage extends State<UpdatePasswordPage> {
               // const MapTab(),
 
               /// Absen page
-              const AbsenTab(),
+              const AttendanceTab(),
 
               /// Profile page
               const MyProfileTab()

@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
@@ -5,24 +6,32 @@ import 'package:quickalert/models/quickalert_type.dart';
 import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:sijj_provinsi_banten/components/layouts/sidebar_layout.dart';
 import 'package:sijj_provinsi_banten/functions/auth_function.dart';
-
 import 'package:sijj_provinsi_banten/pages/settings/update_password_page.dart';
 import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
-import 'package:sijj_provinsi_banten/tabs/report_tab.dart';
+import 'package:sijj_provinsi_banten/tabs/report_detail_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 
-// function to get
+class ReportDetailPage extends StatefulWidget {
+  final String latitude;
+  final String longitude;
+  final String kondisi;
+  final String imageUrl;
 
-class ReportPage extends StatefulWidget {
-  const ReportPage({super.key});
+  const ReportDetailPage({
+    super.key,
+    required this.latitude,
+    required this.longitude,
+    required this.kondisi,
+    required this.imageUrl,
+  });
 
   @override
-  State<ReportPage> createState() => _ReportPageState();
+  State<ReportDetailPage> createState() => _ReportDetailPageState();
 }
 
-class _ReportPageState extends State<ReportPage> {
+class _ReportDetailPageState extends State<ReportDetailPage> {
   bool _isLoading = true;
 
   @override
@@ -109,16 +118,21 @@ class _ReportPageState extends State<ReportPage> {
               ],
             ),
             body: <Widget>[
-              /// Home page
-              const ReportTab(),
+              // Home page
+              // const HomeTab(),
 
-              // Map page
-              // const MapTab(),
+              // Absen page
+              ReportDetailTab(
+                latitude: widget.latitude,
+                longitude: widget.longitude,
+                imageUrl: widget.imageUrl,
+                kondisi: widget.kondisi,
+              ),
 
-              /// Absen page
-              const AbsenTab(),
+              // attendace tab
+              const AttendanceTab(),
 
-              /// Profile page
+              // Profile page
               const MyProfileTab()
             ][currentPageIndex],
             bottomNavigationBar: NavigationBar(

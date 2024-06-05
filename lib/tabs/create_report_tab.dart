@@ -8,7 +8,6 @@ import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sijj_provinsi_banten/api/endpoints.dart';
-import 'package:sijj_provinsi_banten/pages/report.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 import 'package:geolocator/geolocator.dart';
@@ -39,8 +38,8 @@ Future<void> createReport(String latitude, String longitude, String condition,
       text: responseBody['message'],
       confirmBtnColor: primary,
       onConfirmBtnTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const ReportPage()));
+        // Navigator.push(context,
+        //     MaterialPageRoute(builder: (context) => const ReportPage()));
       },
     );
     onSuccess();

@@ -111,7 +111,7 @@ class _CoordinatePage extends State<CoordinatePage> {
               const CoordinateTab(),
 
               /// Absen page
-              const AbsenTab(),
+              const AttendanceTab(),
 
               /// Profile page
               const MyProfileTab()
