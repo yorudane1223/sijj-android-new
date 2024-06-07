@@ -12,3 +12,4 @@ const realtimeLocationStore =
 const verifyTokenApiUrl = 'https://sijj.dpupr.com/api/penilik/verify-token';
 const reportApiUrl = 'https://sijj.dpupr.com/api/penilik/laporan';
 const createReportApiUrl = 'https://sijj.dpupr.com/api/penilik/laporan/create';
+const myRoads = 'https://sijj.dpupr.com/api/ruas_jalan';

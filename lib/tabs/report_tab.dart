@@ -13,9 +13,6 @@ import 'package:sijj_provinsi_banten/models/report_model.dart';
 import 'package:sijj_provinsi_banten/pages/auth/login_page.dart';
 import 'package:sijj_provinsi_banten/pages/create_report.dart';
 import 'package:sijj_provinsi_banten/pages/report_detail_page.dart';
-import 'package:sijj_provinsi_banten/pages/report_page.dart';
-import 'package:sijj_provinsi_banten/services/realtime_location.dart';
-import 'package:sijj_provinsi_banten/tabs/report_detail_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 

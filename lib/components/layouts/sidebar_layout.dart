@@ -9,7 +9,6 @@ import 'package:sijj_provinsi_banten/pages/map_page.dart';
 import 'package:sijj_provinsi_banten/pages/report_page.dart';
 import 'package:sijj_provinsi_banten/tabs/attendance_tab.dart';
 import 'package:sijj_provinsi_banten/tabs/my_profile_tab.dart';
-import 'package:sijj_provinsi_banten/tabs/report_tab.dart';
 import 'package:sijj_provinsi_banten/themes/color.dart';
 import 'package:sijj_provinsi_banten/themes/fonts.dart';
 

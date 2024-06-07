@@ -15,13 +15,26 @@ class _MapTabState extends State<MapTab> {
     return Scaffold(
       body: FlutterMap(
         options: const MapOptions(
-          initialCenter: LatLng(-6.1118321, 106.0541928),
-          initialZoom: 9.2,
+          center: LatLng(-6.1118321, 106.0541928),
+          zoom: 9.2,
         ),
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             userAgentPackageName: 'com.example.app',
+          ),
+          PolylineLayer(
+            polylines: [
+              Polyline(
+                points: [
+                  const LatLng(-6.1118321, 106.0541928), // Starting point
+                  const LatLng(-6.1218321, 106.0641928), // Intermediate point
+                  const LatLng(-6.1318321, 106.0741928), // End point
+                ],
+                strokeWidth: 4.0,
+                color: Colors.blue,
+              ),
+            ],
           ),
         ],
       ),

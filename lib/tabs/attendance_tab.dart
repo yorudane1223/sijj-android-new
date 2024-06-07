@@ -264,7 +264,7 @@ class _AbsenTabState extends State<AttendanceTab> {
         barrierDismissible: false,
         type: QuickAlertType.warning,
         confirmBtnColor: primary,
-        text: 'Lokasi tidak tersedia!',
+        text: 'Lokasi tidak tersedia! Silahkan ulang kembali.',
       );
       return;
     }
