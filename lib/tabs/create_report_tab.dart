@@ -306,10 +306,8 @@ class _CreateReportPageState extends State<CreateReportTab> {
                             items: _roads.map((Road road) {
                               return DropdownMenuItem<String>(
                                 value: road.id.toString(),
-                                child: Text('${road.nama}  (${road.id})',
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: 9)),
+                                child: Text('${road.nama} (${road.id})',
+                                    style: poppins.copyWith(fontSize: 14)),
                               );
                             }).toList(),
                             decoration: const InputDecoration(
